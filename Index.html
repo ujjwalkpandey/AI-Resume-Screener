@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    :root {
+      /* Light Mode (Purple & White) */
+      --bg-l: #f4f7fe;
+      --card-l: #ffffff;
+      --primary-l: #7c4dff;
+      --text-l: #2d3436;
+      --border-l: #e0e0e0;
+      
+      /* Dark Mode (Black & Gold) */
+      --bg-d: #0d0d0d;
+      --card-d: #1a1a1a;
+      --primary-d: #d4af37;
+      --text-d: #f5f5f5;
+      --border-d: #333333;
+    }
+
+    body { 
+      transition: background 0.3s, color 0.3s;
+      font-family: 'Inter', -apple-system, sans-serif; 
+      display: flex; justify-content: center; padding: 20px;
+      margin: 0; min-height: 100vh;
+    }
+
+    /* Theme Application */
+    body.light { background: var(--bg-l); color: var(--text-l); }
+    body.dark { background: var(--bg-d); color: var(--text-d); }
+
+    .container { 
+      width: 100%; max-width: 480px; padding: 32px; border-radius: 24px;
+      transition: all 0.3s ease; margin-top: 40px;
+    }
+    .light .container { background: var(--card-l); box-shadow: 0 10px 40px rgba(124, 77, 255, 0.1); border: 1px solid var(--border-l); }
+    .dark .container { background: var(--card-d); box-shadow: 0 10px 50px rgba(0,0,0,0.7); border: 1px solid var(--border-d); }
+
+    /* Header & Toggle */
+    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .theme-toggle { 
+      cursor: pointer; padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; border: none;
+      transition: 0.2s;
+    }
+    .light .theme-toggle { background: #eee; color: #333; }
+    .dark .theme-toggle { background: #333; color: var(--primary-d); }
+
+    h1 { margin: 0; font-size: 24px; letter-spacing: -0.5px; }
+    .light h1 { color: var(--primary-l); }
+    .dark h1 { color: var(--primary-d); }
+
+    /* Inputs */
+    label { display: block; margin: 16px 0 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+    input, textarea { 
+      width: 100%; padding: 12px; border-radius: 10px; box-sizing: border-box; outline: none; border: 1px solid transparent;
+      transition: 0.2s; font-size: 14px;
+    }
+    .light input, .light textarea { background: #f9f9fb; border-color: #eee; color: #333; }
+    .dark input, .dark textarea { background: #252525; border-color: #333; color: #fff; }
+    input:focus, textarea:focus { border-color: var(--primary-l); }
+    .dark input:focus, .dark textarea:focus { border-color: var(--primary-d); }
+
+    /* Button */
+    button#btn { 
+      width: 100%; border: none; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 24px;
+      transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .light button#btn { background: var(--primary-l); color: white; box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3); }
+    .dark button#btn { background: var(--primary-d); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
+    button#btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+
+    /* Results Card */
+    #result { 
+      margin-top: 24px; padding: 20px; border-radius: 16px; display: none;
+      animation: slideIn 0.4s ease-out;
+    }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .light #result { background: rgba(124, 77, 255, 0.05); border: 1px solid rgba(124, 77, 255, 0.1); }
+    .dark #result { background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.1); }
+
+    .progress-bg { background: #e0e0e0; height: 8px; border-radius: 4px; margin: 12px 0; overflow: hidden; }
+    .dark .progress-bg { background: #333; }
+    .progress-fill { height: 100%; width: 0%; transition: width 1.5s cubic-bezier(0.1, 0, 0, 1); }
+    .light .progress-fill { background: var(--primary-l); }
+    .dark .progress-fill { background: var(--primary-d); }
+
+    .status-dot { height: 8px; width: 8px; background: #00c853; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 10px #00c853; }
+  </style>
+</head>
+<body class="dark"> <div class="container">
+    <div class="header-row">
+      <div style="font-size: 11px; opacity: 0.8;"><span class="status-dot"></span> LIVE ENGINE</div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌓 TOGGLE THEME</button>
+    </div>
+    
+    <h1>Screener AI</h1>
+    <p style="margin: 0; font-size: 14px; opacity: 0.6;">Intelligent candidate evaluation pipeline.</p>
+    
+    <label>Candidate Email</label>
+    <input type="email" id="email" placeholder="name@domain.com">
+    
+    <label>Target Role / JD</label>
+    <textarea id="jd" rows="3" placeholder="Paste requirements..."></textarea>
+    
+    <label>Resume Asset (PDF/DOCX)</label>
+    <input type="file" id="resumeFile">
+    
+    <button onclick="process()" id="btn">PROCESS APPLICATION</button>
+    
+    <div id="result">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+        <span style="font-size: 13px; font-weight: 700; opacity: 0.8;">MATCH SCORE</span>
+        <span id="scoreText" style="font-size: 28px; font-weight: 900;">0%</span>
+      </div>
+      <div class="progress-bg"><div id="scoreFill" class="progress-fill"></div></div>
+      <p id="summary" style="font-size: 13px; line-height: 1.6; opacity: 0.9; margin: 15px 0 0;"></p>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const b = document.body;
+      b.className = b.className === 'dark' ? 'light' : 'dark';
+    }
+
+    function process() {
+      const btn = document.getElementById('btn');
+      const file = document.getElementById('resumeFile').files[0];
+      if (!file) return alert("Upload resume first");
+      
+      btn.innerText = "ENGINE ANALYZING..."; 
+      btn.disabled = true;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        google.script.run.withSuccessHandler(showResult).processApplication(
+          e.target.result.split(',')[1], file.name, file.type, 
+          document.getElementById('jd').value, document.getElementById('email').value
+        );
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function showResult(res) {
+      const btn = document.getElementById('btn');
+      btn.innerText = "PROCESS APPLICATION"; btn.disabled = false;
+      if (!res.success) return alert("System Error: " + res.error);
+      
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('scoreText').innerText = res.data.match_score + "%";
+      document.getElementById('scoreFill').style.width = res.data.match_score + "%";
+      document.getElementById('summary').innerText = res.data.summary;
+    }
+  </script>
+</body>
+</html>
