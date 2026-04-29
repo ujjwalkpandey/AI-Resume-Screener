@@ -1,56 +1,78 @@
-🚀 AI-Resume-Screener: Elite Recruitment Pipeline
-Screener AI is a high-availability, full-stack recruitment automation tool built to bridge the gap between massive applicant volumes and efficient hiring decisions. By combining Large Language Models (LLMs) with a custom-built resilient architecture, it ensures that recruiters never face downtime, even when third-party APIs hit their limits.
+# 🚀 Screener AI: High-Availability Recruitment Pipeline
 
-💎 The "Always-On" Advantage (Core Innovation)
-The most significant challenge with modern AI-driven apps is API Reliability. Most applications crash when they hit rate limits. This project implements a Dual-Engine Architecture:
+**Screener AI** is an elite, full-stack recruitment automation engine designed to bridge the gap between massive applicant volumes and quality hiring decisions. Built for the **MLSA KIIT Chapter**, this system features a unique **resilient architecture** that ensures recruiters never experience downtime, even when third-party AI APIs are rate-limited.
 
-Primary Engine (Gemini 1.5 Flash): Performs deep semantic analysis, extracting candidate intent, specific skill matches, and professional summaries.
+---
 
-Secondary Engine (Semantic Heuristic): A built-in "fail-safe" that automatically activates if the AI API is rate-limited or unavailable. It performs a weighted keyword-density analysis to provide a reliable match score, ensuring the system remains 100% functional.
+## 📖 About the Project
 
-✨ Key Features
-Intelligent Analysis: Uses Gemini AI to match resumes against complex Job Descriptions (JD) beyond simple keyword matching.
+Traditional AI screening tools fail the moment an API quota is reached, causing "Error 429" screens that halt productivity. **Screener AI** solves this by implementing a **Dual-Engine Logic Gate**. It prioritizes deep semantic analysis via LLMs but stays "Always-On" through an automated switch to local heuristics.
 
-Premium Multi-Theme UI: Features a high-end interface with a one-touch toggle between "Professional Light" (Purple/White) and "Elite Dark" (Black/Gold) modes.
+---
 
-End-to-End Automation:
+## ✨ Key Features
 
-File Processing: Converts PDFs and DOCX files to text in real-time via Google Drive API.
+* **Dual-Engine Analysis**: Leverages **Gemini 1.5 Flash** for deep semantic resume-to-JD matching.
+* **Zero-Downtime Resilience**: Features an **automated fallback** to a local keyword-density engine if the primary AI API is unavailable.
+* **Premium "Elite" UI/UX**: Professional **one-touch toggle** between "Light Mode" (Purple/White) and "Elite Dark Mode" (Black/Gold).
+* **End-to-End Automation**: 
+    * **Live PDF/DOCX Parsing**: Real-time extraction via Google Drive API v3.
+    * **Persistent Logging**: Every screening is logged instantly to a centralized Google Sheet.
+    * **Smart Invitations**: Automated interview triggers for high-scoring candidates (>80%) verified by the LLM.
 
-Persistent Database: Every application is logged instantly to a centralized Google Sheet for tracking.
+---
 
-Smart Triggers: Automatically sends personalized interview invitations via email for candidates scoring above 80% (verified by AI).
+## 🏗️ Technical Architecture
 
-🛠️ Technical Stack
-Language: Google Apps Script (JavaScript V8 Engine).
+The system is designed as a stateless, scalable web application running on Google’s global infrastructure.
 
-AI: Google Generative AI (Gemini 1.5 Flash).
 
-APIs: Google Drive API v3, Google Sheets API, Gmail App Service.
 
-Frontend: HTML5, CSS3 (Glassmorphism & Interactive Animations), JavaScript (Vanilla ES6+).
+* **Frontend**: HTML5, CSS3 (Glassmorphism & Interactive Score Gauges), JavaScript (ES6+).
+* **Backend**: Google Apps Script (V8 Runtime) acting as a serverless middleware.
+* **AI/ML**: Google Generative AI (Gemini 1.5 Flash) via REST integration.
+* **Database**: Google Sheets API for real-time persistent data storage.
 
-🛡️ Security & Scalability
-Environment Safety: The system is designed with a strict separation between the API logic and the UI.
+---
 
-Zero-Footprint Scalability: Built on Google’s global infrastructure, the app can handle multiple simultaneous users without the need for managing servers or databases.
+## 🧠 The "Fail-Safe" Engineering Logic
 
-Credential Protection: (Note for developers: Always use script properties or environment variables; never hardcode API keys in public repositories).
+A core innovation of this project is the **Resilient Logic Gate** implemented in the backend:
+1.  **Stage 1**: System attempts a 100-point semantic match using Gemini.
+2.  **Stage 2**: If the API returns an error (Rate-Limit/Regional), the system silently switches to **Local Heuristic Analysis**.
+3.  **Safety Buffer**: Fallback scores are capped at 79% to ensure automated interview triggers only fire when the full LLM confirms a top-tier candidate.
 
-📈 Impact & Results
-By using this pipeline, recruitment teams can:
+---
 
-Reduce Screening Time: Go from hours of manual reading to seconds of automated analysis.
+## 🚀 Quick Start
 
-Eliminate Technical Bottlenecks: The heuristic fallback ensures zero "Error 429" screens for the end-user.
+### 1. Clone & Setup
+1.  Create a new Google Apps Script project.
+2.  Enable the **Drive API** service in the project settings.
+3.  Copy `Code.gs` and `Index.html` from this repository.
 
-Enhance Candidate Experience: Instant score feedback and automated follow-up emails.
+### 2. Configure Environment
+1.  Obtain an API Key from **Google AI Studio**.
+2.  Replace the placeholder in `Code.gs` with your key:
+    ```javascript
+    const API_KEY = 'YOUR_GEMINI_API_KEY';
+    ```
+    *(Note: Never push your real API key to public repositories)*
 
-🔧 How to Use
-Clone this repo and create a new Google Apps Script project.
+### 3. Deploy
+1.  Click **Deploy > New Deployment**.
+2.  Set type to **Web App** and access to **Anyone**.
 
-Add the Drive Service in the Apps Script editor.
+---
 
-Paste your Gemini API Key from Google AI Studio into the Code.gs file.
+## 🔌 API & Integration Details
 
-Deploy as Web App and experience the elite screening experience.
+| Interaction | Trigger | Result |
+| :--- | :--- | :--- |
+| **Resume Upload** | PDF/DOCX Submission | Persistent Sheet Log |
+| **Score > 80%** | AI Verification | Automated Interview Email |
+| **API Limit Reached** | 429 Error Detection | Heuristic Fallback Activation |
+
+---
+---
+**Screener AI: Because recruitment shouldn't wait for an API to reset.**
